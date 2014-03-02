@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvDataReader", "CsvDataReader\CsvDataReader.csproj", "{A8505E08-C6CF-4C55-8001-EC6C2A4786F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvDataReaderTest", "CsvDataReaderTest\CsvDataReaderTest.csproj", "{ADB45236-722C-468A-B8FB-07796DF762EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8505E08-C6CF-4C55-8001-EC6C2A4786F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8505E08-C6CF-4C55-8001-EC6C2A4786F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8505E08-C6CF-4C55-8001-EC6C2A4786F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8505E08-C6CF-4C55-8001-EC6C2A4786F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADB45236-722C-468A-B8FB-07796DF762EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADB45236-722C-468A-B8FB-07796DF762EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADB45236-722C-468A-B8FB-07796DF762EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADB45236-722C-468A-B8FB-07796DF762EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
