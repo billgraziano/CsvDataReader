@@ -29,7 +29,7 @@ namespace CsvDataReaderTest
         {
             CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
             Assert.AreEqual(0, reader.GetOrdinal("Header1"));
-            Assert.AreEqual(1,reader.GetOrdinal("Header2"));
+            Assert.AreEqual(1, reader.GetOrdinal("Header2"));
             Assert.AreEqual(2, reader.GetOrdinal("Header3"));
         }
 
@@ -79,6 +79,21 @@ namespace CsvDataReaderTest
             Assert.AreEqual("Header1", reader.GetName(0));
         }
 
+        [TestMethod]
+        public void GetOrdinal()
+        {
+            CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
+            Assert.AreEqual(0, reader.GetOrdinal("Header1"));
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(IndexOutOfRangeException), "The column ZZZZ could not be found in the results")]
+        public void GetOrdinalFailure()
+        {
+            CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
+            int i = reader.GetOrdinal("ZZZZ");
+            //Assert.Fail();
+        }
 
     }
 }

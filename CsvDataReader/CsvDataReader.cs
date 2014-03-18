@@ -188,12 +188,13 @@ namespace SqlUtilities
                 if (_headers[i] == name)
                 {
                     result = i;
-                    break;
+                    return result;
                 }
-            return result;
 
             // Throw an exception if the ordinal cannot be found.
-            throw new IndexOutOfRangeException("Could not find specified column in results");
+            string s = string.Format("The column {0} could not be found in the results", name);
+            throw new IndexOutOfRangeException(s);
+            
         }
 
         public object this[int i]
