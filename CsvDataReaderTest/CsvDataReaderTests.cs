@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace CsvDataReaderTest
 {
     [TestClass]
-    public class UnitTest1
+    public class CsvDataReaderTests
     {
         [TestMethod]
         public void SimpleOpen()
