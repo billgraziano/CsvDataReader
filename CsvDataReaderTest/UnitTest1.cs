@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System.Data;
 using SqlUtilities;
+using System.Collections.Generic;
 
 namespace CsvDataReaderTest
 {
@@ -93,6 +94,37 @@ namespace CsvDataReaderTest
             CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
             int i = reader.GetOrdinal("ZZZZ");
             //Assert.Fail();
+        }
+
+        [TestMethod]
+        public void AddStaticValue()
+        {
+            Dictionary<String, String> staticColumns = new Dictionary<String, String>();
+            staticColumns.Add("Column1", "Value");
+            CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt", staticColumns);
+            
+            Assert.AreEqual(3, reader.GetOrdinal("Column1"));
+            while (reader.Read())
+            {
+                Assert.AreEqual("Value", reader.GetValue(reader.GetOrdinal("Column1")));
+            }
+            reader.Close();
+        }
+
+        [TestMethod]
+        public void TwoStaticColumns()
+        {
+            Dictionary<String, String> staticColumns = new Dictionary<String, String>();
+            staticColumns.Add("Column1", "Value");
+            staticColumns.Add("ColumnZ", "FileName");
+            CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt", staticColumns);
+
+            Assert.AreEqual(4, reader.GetOrdinal("ColumnZ"));
+            while (reader.Read())
+            {
+                Assert.AreEqual("FileName", reader.GetValue(reader.GetOrdinal("ColumnZ")));
+            }
+            reader.Close();
         }
 
     }

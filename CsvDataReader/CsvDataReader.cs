@@ -18,6 +18,7 @@ namespace SqlUtilities
         private StreamReader _stream;
         private string[] _headers;
         private string[] _currentRow;
+        private string _staticValues = "";
 
         // This should match strings and strings that
         // have quotes around them and include embedded commas
@@ -29,8 +30,28 @@ namespace SqlUtilities
                 throw new FileNotFoundException();
 
             _stream = new StreamReader(fileName);
-
             _headers = _stream.ReadLine().Split(',');
+        }
+
+        public CsvDataReader(string fileName, Dictionary<string, string> staticColumns)
+        {
+            if (!File.Exists(fileName))
+                throw new FileNotFoundException();
+
+            _stream = new StreamReader(fileName);
+
+            // Get the raw header
+            string rawHeader = _stream.ReadLine();
+
+            // Add all the static columns into the header string
+            // And all the values into the string we use for reading
+            foreach (KeyValuePair<string, string> keyValue in staticColumns)
+            {
+                rawHeader += string.Format(",{0}", keyValue.Key);
+                _staticValues += string.Format(",{0}", keyValue.Value.ToString());
+            }
+            _headers = rawHeader.Split(',');
+
         }
 
         public bool Read()
@@ -38,9 +59,15 @@ namespace SqlUtilities
             if (_stream == null) return false;
             if (_stream.EndOfStream) return false;
 
-            _currentRow = _CsvRegex.Split(_stream.ReadLine());
+            string rawRow = _stream.ReadLine();
 
-            // Unfortunately my Regex keeps the quotes around strings.
+            // Add any static values that we have
+            if (_staticValues.Length > 0)
+                rawRow += _staticValues;
+
+            _currentRow = _CsvRegex.Split(rawRow);
+
+            // Unfortunately the Regex keeps the quotes around strings.
             // Those have to go.
             // I'm sure there's a better way but this works.
             for (int i = 0; i < _currentRow.Length; i++)
@@ -163,7 +190,7 @@ namespace SqlUtilities
 
         public int GetValues(object[] values)
         {
-            int i = 0, j = 0;
+            int i = 0; //, j = 0;
             //for (; i < values.Length && j < m_resultset.metaData.Length; i++, j++)
             //{
             //    values[i] = m_resultset.data[m_nPos, j];
