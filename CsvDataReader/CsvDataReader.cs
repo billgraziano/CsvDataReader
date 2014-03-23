@@ -212,7 +212,7 @@ namespace SqlUtilities
 
             int result = -1;
             for (int i = 0; i < _headers.Length; i++)
-                if (_headers[i] == name)
+                if (_headers[i].ToLower() == name.ToLower())
                 {
                     result = i;
                     return result;

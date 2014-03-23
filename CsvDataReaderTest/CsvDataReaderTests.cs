@@ -35,6 +35,15 @@ namespace CsvDataReaderTest
         }
 
         [TestMethod]
+        public void CaseInsensitiveColumnNames()
+        {
+            CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
+            Assert.AreEqual(0, reader.GetOrdinal("header1"));
+            Assert.AreEqual(1, reader.GetOrdinal("HEADER2"));
+            Assert.AreEqual(2, reader.GetOrdinal("HeaDER3"));
+        }
+
+        [TestMethod]
         public void ReadAllRows()
         {
             CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
