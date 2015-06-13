@@ -5,6 +5,8 @@ using System.Data;
 using SqlUtilities;
 using System.Collections.Generic;
 
+using System.IO;
+
 namespace CsvDataReaderTest
 {
     [TestClass]
@@ -14,6 +16,7 @@ namespace CsvDataReaderTest
         public void SimpleOpen()
         {
             CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -23,6 +26,7 @@ namespace CsvDataReaderTest
             Assert.AreEqual(reader.IsClosed, false);
             reader.Close();
             Assert.AreEqual(reader.IsClosed, true);
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -32,6 +36,7 @@ namespace CsvDataReaderTest
             Assert.AreEqual(0, reader.GetOrdinal("Header1"));
             Assert.AreEqual(1, reader.GetOrdinal("Header2"));
             Assert.AreEqual(2, reader.GetOrdinal("Header3"));
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -41,6 +46,7 @@ namespace CsvDataReaderTest
             Assert.AreEqual(0, reader.GetOrdinal("header1"));
             Assert.AreEqual(1, reader.GetOrdinal("HEADER2"));
             Assert.AreEqual(2, reader.GetOrdinal("HeaDER3"));
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -51,6 +57,7 @@ namespace CsvDataReaderTest
             {
             }
             reader.Close();
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -61,6 +68,7 @@ namespace CsvDataReaderTest
             string v1 = reader.GetValue(0).ToString();
             Assert.AreEqual("Row1A", v1);
             Assert.AreEqual("Row1B", reader.GetValue(1).ToString());
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -68,6 +76,7 @@ namespace CsvDataReaderTest
         {
             CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
             Assert.AreEqual(3, reader.FieldCount);
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -80,6 +89,7 @@ namespace CsvDataReaderTest
             string v1 = reader.GetValue(2).ToString();
             string expected = "Q,A";
             Assert.AreEqual(expected, v1);
+            reader.Dispose();
             
         }
         [TestMethod]
@@ -87,6 +97,7 @@ namespace CsvDataReaderTest
         {
             CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
             Assert.AreEqual("Header1", reader.GetName(0));
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -94,15 +105,19 @@ namespace CsvDataReaderTest
         {
             CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
             Assert.AreEqual(0, reader.GetOrdinal("Header1"));
+            reader.Dispose();
         }
 
         [TestMethod()]
         [ExpectedException(typeof(IndexOutOfRangeException), "The column ZZZZ could not be found in the results")]
         public void GetOrdinalFailure()
         {
-            CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
-            int i = reader.GetOrdinal("ZZZZ");
+            using (CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt"))
+            {
+                int i = reader.GetOrdinal("ZZZZ");
+            }
             //Assert.Fail();
+            //reader.Dispose();
         }
 
         [TestMethod]
@@ -118,6 +133,7 @@ namespace CsvDataReaderTest
                 Assert.AreEqual("Value", reader.GetValue(reader.GetOrdinal("Column1")));
             }
             reader.Close();
+            reader.Dispose();
         }
 
         [TestMethod]
@@ -134,7 +150,46 @@ namespace CsvDataReaderTest
                 Assert.AreEqual("FileName", reader.GetValue(reader.GetOrdinal("ColumnZ")));
             }
             reader.Close();
+            reader.Dispose();
         }
 
+        [TestMethod]
+        public void DisposeReader()
+        {
+            CsvDataReader reader = new CsvDataReader(@"..\..\SimpleCsv.txt");
+            Assert.AreEqual(reader.IsClosed, false);
+            reader.Close();
+            reader.Dispose();
+            reader.Dispose();
+        }
+
+
+        [TestMethod]
+        public void MoveFile()
+        {
+            CsvDataReader reader = new CsvDataReader(@"..\..\MoveCsv.txt");
+            Assert.AreEqual(reader.IsClosed, false);
+            reader.Close();
+            Assert.AreEqual(reader.IsClosed, true);
+            reader.Dispose();
+            
+            File.Move(@"..\..\MoveCsv.txt", @"..\..\MoveCsvTemp.txt");
+            File.Move(@"..\..\MoveCsvTemp.txt", @"..\..\MoveCsv.txt");
+        }
+
+
+        [TestMethod]
+        public void MoveFileUsing()
+        {
+            using (CsvDataReader reader = new CsvDataReader(@"..\..\MoveCsv.txt"))
+            {
+                Assert.AreEqual(reader.IsClosed, false);
+                reader.Close();
+                Assert.AreEqual(reader.IsClosed, true);
+            }
+            
+            File.Move(@"..\..\MoveCsv.txt", @"..\..\MoveCsvTemp.txt");
+            File.Move(@"..\..\MoveCsvTemp.txt", @"..\..\MoveCsv.txt");
+        }
     }
 }

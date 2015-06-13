@@ -65,6 +65,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MoveCsv.txt" />
     <Content Include="InvalidCsv.txt" />
     <Content Include="SimpleCsv.txt" />
   </ItemGroup>

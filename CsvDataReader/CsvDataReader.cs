@@ -9,11 +9,12 @@ using System.Text.RegularExpressions;
 
 namespace SqlUtilities
 {
-    public class CsvDataReader : IDataReader
+    public class CsvDataReader : IDataReader, IDisposable
     {
         // The DataReader should always be open when returned to the user.
         private bool _isClosed = false;
 
+        private bool _disposed = false;
 
         private StreamReader _stream;
         private string[] _headers;
@@ -260,26 +261,23 @@ namespace SqlUtilities
         //    return CultureInfo.CurrentCulture.CompareInfo.Compare(strA, strB, CompareOptions.IgnoreKanaType | CompareOptions.IgnoreWidth | CompareOptions.IgnoreCase);
         //}
 
-        void IDisposable.Dispose()
+        public void Dispose()
         {
+            // Based on https://msdn.microsoft.com/en-us/library/fs2xkftw(v=vs.110).aspx
             this.Dispose(true);
             System.GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        public void Dispose(bool disposing)
         {
+            if (_disposed)
+                return;
+
             if (disposing)
-            {
-                try
-                {
-                    this.Close();
-                }
-                catch (Exception e)
-                {
-                    throw new SystemException("An exception of type " + e.GetType() +
-                                              " was encountered while closing the TemplateDataReader.");
-                }
-            }
+                _stream.Dispose();
+
+            _disposed = true;
+
         }
 
         #region Not Used
